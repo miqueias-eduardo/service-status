@@ -1,24 +1,29 @@
 import axios from "axios";
 
 async function checkApi(url) {
-  const hora = Date.now();
-  let tempoApi = 0;
+  const inicio = Date.now();
+  let tempoResposta = 0;
   try {
     const api = await axios.get(url, {
       timeout: 10000,
     });
-    tempoApi = Date.now() - hora;
+    tempoResposta = Date.now() - inicio;
     if (api) {
       const dados = {
         Status: "online",
-        Tempo_De_Resposta: tempoApi + "ms",
+        Tempo_De_Resposta: tempoResposta + "ms",
+        codigo_http:api.status,
+        verificado_em:new Date().toLocaleString("pt-BR", {
+  dateStyle: "short",
+  timeStyle: "medium"
+}),
       };
-      return console.log(dados);
+      return dados;
     }
   }
   catch (error) {
     let mensError = "";
-    const tempoError = Date.now() - hora;
+    const tempoError = Date.now() - inicio;
     if (error.response) {
       mensError = `A API respondeu com erro (${error.response.status})`;
     } else if (error.request) {
@@ -30,7 +35,11 @@ async function checkApi(url) {
       Status: "offline",
       Tempo_De_Resposta: tempoError + "ms",
       motivo: mensError,
+      verificado_em:new Date().toLocaleString("pt-BR", {
+  dateStyle: "short",
+  timeStyle: "medium"
+}),
     };
-    return console.log(dados);
+    return dados;
   }
 }
