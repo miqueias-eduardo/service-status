@@ -61,3 +61,7 @@ async function iniciarMonitor(intervalo) {
   }
  },intervalo)
 }
+
+function deletarMonitor(id){
+  monitores = monitores.filter(m => m.id !== id);
+}
