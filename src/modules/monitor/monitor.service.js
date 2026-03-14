@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let monitores=[];
-
+let id = 1
 async function checkApi(url) {
   const inicio = Date.now();
   let tempoResposta = 0;
@@ -47,7 +47,10 @@ async function checkApi(url) {
 }
 
 function adicionarMonitor(url,apelido){
- monitores.push({url,apelido})
+ monitores.push({id:id,
+  url,
+  apelido})
+id++;
 }
 
 async function iniciarMonitor(intervalo) {
