@@ -1,5 +1,7 @@
 import axios from "axios";
 
+let monitores=[];
+
 async function checkApi(url) {
   const inicio = Date.now();
   let tempoResposta = 0;
@@ -42,4 +44,17 @@ async function checkApi(url) {
     };
     return dados;
   }
+}
+
+function adicionarMonitor(url,apelido){
+ monitores.push({url,apelido})
+}
+
+async function iniciarMonitor(intervalo) {
+ setInterval(async () =>{
+ for (let index = 0; index < monitores.length; index++) {
+  let api = monitores[index]
+  await checkApi(api.url);
+  }
+ },intervalo)
 }
