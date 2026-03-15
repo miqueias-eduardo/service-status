@@ -1,7 +1,18 @@
 import axios from "axios";
+import {randomUUID} from 'crypto';
 
 let monitores=[];
-let id = 1
+
+function gerarId() {
+  let id;
+
+do {
+    id = randomUUID();
+  } while (monitores.some(m => m.id === id));
+
+  return id;
+}
+
 async function checkApi(url) {
   const inicio = Date.now();
   let tempoResposta = 0;
@@ -47,10 +58,9 @@ async function checkApi(url) {
 }
 
 function adicionarMonitor(url,apelido){
- monitores.push({id:id,
+ monitores.push({id:gerarId(),
   url,
   apelido})
-id++;
 }
 
 async function iniciarMonitor(intervalo) {
