@@ -12,10 +12,10 @@ async function checkApi(url) {
     tempoResposta = Date.now() - inicio;
     if (api) {
       const dados = {
-        Status: "online",
-        Tempo_De_Resposta: tempoResposta + "ms",
-        codigo_http:api.status,
-        verificado_em:new Date().toLocaleString("pt-BR", {
+        status: "online",
+        tempoResposta: tempoResposta + "ms",
+        codigoHttp:api.status,
+        verificadoEm:new Date().toLocaleString("pt-BR", {
   dateStyle: "short",
   timeStyle: "medium"
 }),
@@ -34,10 +34,10 @@ async function checkApi(url) {
       mensError = error.message;
     }
     const dados = {
-      Status: "offline",
-      Tempo_De_Resposta: tempoError + "ms",
+      status: "offline",
+      tempoResposta: tempoError + "ms",
       motivo: mensError,
-      verificado_em:new Date().toLocaleString("pt-BR", {
+      verificadoEm:new Date().toLocaleString("pt-BR", {
   dateStyle: "short",
   timeStyle: "medium"
 }),
