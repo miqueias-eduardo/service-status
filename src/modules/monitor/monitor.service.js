@@ -63,6 +63,10 @@ function adicionarMonitor(url,apelido){
   apelido})
 }
 
+function listarMonitores(){
+  return monitores;
+}
+
 async function iniciarMonitor(intervalo) {
  setInterval(async () =>{
  for (let index = 0; index < monitores.length; index++) {
