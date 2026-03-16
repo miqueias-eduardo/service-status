@@ -71,7 +71,8 @@ async function iniciarMonitor(intervalo) {
  setInterval(async () =>{
  for (let index = 0; index < monitores.length; index++) {
   let api = monitores[index]
-  await checkApi(api.url);
+  const resultado = await checkApi(api.url);
+  console.log(api.apelido, resultado)
   }
  },intervalo)
 }
