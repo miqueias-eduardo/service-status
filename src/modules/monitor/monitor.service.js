@@ -80,3 +80,5 @@ async function iniciarMonitor(intervalo) {
 function deletarMonitor(id){
   monitores = monitores.filter(m => m.id !== id);
 }
+
+export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores }
