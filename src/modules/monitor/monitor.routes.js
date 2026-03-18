@@ -3,7 +3,7 @@ import * as monitor from './monitor.service.js';
 
 const router = express.Router();
 
-router.post('/monitor', (req,res)=>{
+router.post('/', (req,res)=>{
  try{
     const{url,apelido}= req.body
 
@@ -28,7 +28,7 @@ catch(error){
 }
 })
 
-router.get('/monitor',(req,res)=>{
+router.get('/',(req,res)=>{
     try{
     const monitores = monitor.listarMonitores();
     res.status(200).json({mensagem:'monitores listados',
@@ -40,7 +40,7 @@ router.get('/monitor',(req,res)=>{
     }
 })
 
-router.delete('/monitor/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   try {
     const { id } = req.params;
 
