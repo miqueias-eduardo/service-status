@@ -65,3 +65,5 @@ router.delete('/monitor/:id', (req, res) => {
     res.status(500).send('Erro no servidor');
   }
 });
+
+export default router;
