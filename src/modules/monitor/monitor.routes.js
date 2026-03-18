@@ -39,3 +39,29 @@ router.get('/monitor',(req,res)=>{
      res.status(500).send('Erro no servidor')
     }
 })
+
+router.delete('/monitor/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ erro: "ID é obrigatório" });
+    }
+
+    const removido = monitor.deletarMonitor(id);
+
+    if (!removido) {
+      return res.status(404).json({
+        erro: "Monitor não encontrado"
+      });
+    }
+
+    return res.status(200).json({
+      mensagem: "Monitor removido com sucesso"
+    });
+
+  } catch (error) {
+    console.log('Erro ao deletar Monitor', error);
+    res.status(500).send('Erro no servidor');
+  }
+});
