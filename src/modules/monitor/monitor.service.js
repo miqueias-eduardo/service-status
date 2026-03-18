@@ -78,7 +78,9 @@ async function iniciarMonitor(intervalo) {
 }
 
 function deletarMonitor(id){
+  const tamanhoAntes = monitores.length;
   monitores = monitores.filter(m => m.id !== id);
+  return monitores.length < tamanhoAntes;
 }
 
 export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores }
