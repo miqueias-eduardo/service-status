@@ -58,9 +58,21 @@ async function checkApi(url) {
 }
 
 function adicionarMonitor(url,apelido){
- monitores.push({id:gerarId(),
-  url,
-  apelido})
+  if (monitores.some(m => m.url === url)) {
+    throw new Error('Essa URL já está sendo monitorada')
+  }
+  if (monitores.some(m => m.apelido === apelido)) {
+    throw new Error('Esse apelido já está em uso')
+  }
+
+ const novoMonitor = {
+    id: gerarId(),
+    url,
+    apelido
+  };
+  
+   monitores.push(novoMonitor);
+   return novoMonitor;
 }
 
 function listarMonitores(){
