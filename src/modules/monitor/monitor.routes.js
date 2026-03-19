@@ -40,6 +40,54 @@ router.get('/',(req,res)=>{
     }
 })
 
+router.get('/id/:id',(req,res)=>{
+   try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ erro: "ID é obrigatório" });
+    }
+
+    const monitorEncontrado = monitor.buscarPorId(id);
+
+    if (!monitorEncontrado) {
+      return res.status(404).json({
+        erro: "Monitor não encontrado"
+      });
+    }
+
+    return res.status(200).json(monitorEncontrado);
+
+  } catch (error) {
+    console.log('Erro ao buscar Monitor', error);
+    return res.status(500).send('Erro no servidor');
+  }
+});
+
+router.get('/apelido/:apelido',(req,res)=>{
+try {
+    const { apelido } = req.params;
+
+    if (!apelido) {
+      return res.status(400).json({ erro: "Apelido é obrigatório" });
+    }
+
+    const monitorEncontrado = monitor.buscarPorApelido(apelido);
+
+    if (!monitorEncontrado) {
+      return res.status(404).json({
+        erro: "Monitor não encontrado"
+      });
+    }
+
+    return res.status(200).json(monitorEncontrado);
+
+  } catch (error) {
+    console.log('Erro ao buscar Monitor', error);
+    return res.status(500).send('Erro no servidor');
+  }
+})
+
 router.delete('/:id', (req, res) => {
   try {
     const { id } = req.params;
