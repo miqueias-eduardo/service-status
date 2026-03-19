@@ -67,6 +67,10 @@ function listarMonitores(){
   return monitores;
 }
 
+function buscarMonitor(id){
+  return monitores.find(m => m.id === id);
+}
+
 async function iniciarMonitor(intervalo) {
  setInterval(async () =>{
  for (let index = 0; index < monitores.length; index++) {
@@ -83,4 +87,4 @@ function deletarMonitor(id){
   return monitores.length < tamanhoAntes;
 }
 
-export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores }
+export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores, buscarMonitor }
