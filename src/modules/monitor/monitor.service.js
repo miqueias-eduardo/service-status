@@ -59,10 +59,14 @@ async function checkApi(url) {
 
 function adicionarMonitor(url,apelido){
   if (monitores.some(m => m.url === url)) {
-    throw new Error('Essa URL já está sendo monitorada')
+    const erro = new Error('Essa URL já está sendo monitorada');
+    erro.statusCode = 409;
+    throw erro;
   }
   if (monitores.some(m => m.apelido === apelido)) {
-    throw new Error('Esse apelido já está em uso')
+    const erro = new Error('Esse apelido já está em uso');
+    erro.statusCode = 409;
+    throw erro;
   }
 
  const novoMonitor = {
@@ -70,7 +74,7 @@ function adicionarMonitor(url,apelido){
     url,
     apelido
   };
-  
+
    monitores.push(novoMonitor);
    return novoMonitor;
 }

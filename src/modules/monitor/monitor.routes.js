@@ -23,6 +23,11 @@ router.post('/', (req,res)=>{
     res.status(201).json({mensagem:'Monitor adicionado com sucesso'})
 }
 catch(error){
+   if (error.statusCode) {
+    return res.status(error.statusCode).json({
+      erro: error.message
+    });
+  }
  console.log('Erro ao adicionar Monitor',error)
  res.status(500).send('Erro no servidor')
 }
