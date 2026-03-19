@@ -67,8 +67,12 @@ function listarMonitores(){
   return monitores;
 }
 
-function buscarMonitor(id){
+function buscarPorId(id) {
   return monitores.find(m => m.id === id);
+}
+
+function buscarPorApelido(apelido) {
+  return monitores.find(m => m.apelido === apelido);
 }
 
 async function iniciarMonitor(intervalo) {
@@ -87,4 +91,4 @@ function deletarMonitor(id){
   return monitores.length < tamanhoAntes;
 }
 
-export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores, buscarMonitor }
+export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores, buscarPorId, buscarPorApelido }
