@@ -72,7 +72,8 @@ function adicionarMonitor(url,apelido){
  const novoMonitor = {
     id: gerarId(),
     url,
-    apelido
+    apelido,
+    ultimoStatus:null
   };
 
    monitores.push(novoMonitor);
@@ -96,7 +97,8 @@ async function iniciarMonitor(intervalo) {
  for (let index = 0; index < monitores.length; index++) {
   let api = monitores[index]
   const resultado = await checkApi(api.url);
-  console.log(api.apelido, resultado)
+  api.ultimoStatus=resultado;
+  console.log(`[${api.id}] ${api.apelido}`, resultado);
   }
  },intervalo)
 }
