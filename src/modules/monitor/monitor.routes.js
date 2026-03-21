@@ -119,4 +119,24 @@ router.delete('/:id', (req, res) => {
   }
 });
 
+router.post('/start', (req,res)=>{
+try{
+  const {intervaloMinutos} = req.body;
+
+  if(!intervaloMinutos || typeof intervaloMinutos !=='number' ||intervaloMinutos< 5){
+    return res.status(400).json({erro: "o intervalo deve ser um numero de no mínimo 5 minutos"})
+  }
+  const intervaloMs = intervaloMinutos * 60 * 1000;
+  monitor.iniciarMonitor(intervaloMs)
+
+  return res.status(200).json({
+    mensagem:"Monitor iniciado com sucesso"
+  })
+}
+catch (error) {
+      console.log('Erro ao Iniciar Monitor', error);
+    res.status(500).send('Erro no servidor');
+}
+})
+
 export default router;
