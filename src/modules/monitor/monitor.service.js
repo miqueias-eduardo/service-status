@@ -1,5 +1,7 @@
 import axios from "axios";
 import {randomUUID} from 'crypto';
+let loopMonitor = null;
+let ativo = false;
 
 let monitores=[];
 
@@ -93,7 +95,7 @@ function buscarPorApelido(apelido) {
 }
 
 async function iniciarMonitor(intervalo) {
- setInterval(async () =>{
+ loopMonitor = setInterval(async () =>{
  for (let index = 0; index < monitores.length; index++) {
   let api = monitores[index]
   const resultado = await checkApi(api.url);
@@ -101,7 +103,20 @@ async function iniciarMonitor(intervalo) {
   console.log(`[${api.id}] ${api.apelido}`, resultado);
   }
  },intervalo)
+ ativo = true;
+ return true;
 }
+
+function pararMonitor(){
+  clearInterval(loopMonitor);
+  loopMonitor = null;
+  ativo = false;
+  return true;
+}
+
+ function statusMonitor(){
+  return ativo;
+ }
 
 function deletarMonitor(id){
   const tamanhoAntes = monitores.length;
@@ -109,4 +124,6 @@ function deletarMonitor(id){
   return monitores.length < tamanhoAntes;
 }
 
-export { checkApi, adicionarMonitor, iniciarMonitor, deletarMonitor, listarMonitores, buscarPorId, buscarPorApelido }
+export { checkApi, adicionarMonitor, iniciarMonitor,
+        deletarMonitor, listarMonitores, buscarPorId,
+        buscarPorApelido,pararMonitor,statusMonitor}

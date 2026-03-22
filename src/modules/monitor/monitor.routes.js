@@ -119,7 +119,7 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-router.post('/start', (req,res)=>{
+router.post('/iniciar', (req,res)=>{
 try{
   const {intervaloMinutos} = req.body;
 
@@ -139,4 +139,24 @@ catch (error) {
 }
 })
 
+router.post('/parar', (req,res)=>{
+  try{
+    const parar = monitor.pararMonitor();
+    res.status(200).json({mensagem:"Monitor parado com sucesso"})
+  }
+  catch(error){
+       console.log('Erro ao Parar Monitor', error);
+    res.status(500).send('Erro no servidor');
+  }
+})
+
+router.get('/status', (req,res)=>{
+  try {
+    const status = monitor.statusMonitor();
+    res.status(200).json({ ativo: status })
+  } catch (error) {
+         console.log('Erro ao retornar Status do Monitor', error);
+    res.status(500).send('Erro no servidor');
+  }
+})
 export default router;
