@@ -1,19 +1,8 @@
 import axios from "axios";
-import {randomUUID} from 'crypto';
+import {randomUUID} from "crypto";
+import db from "../../infra/database.js"
 let loopMonitor = null;
 let ativo = false;
-
-let monitores=[];
-
-function gerarId() {
-  let id;
-
-do {
-    id = randomUUID();
-  } while (monitores.some(m => m.id === id));
-
-  return id;
-}
 
 async function checkApi(url) {
   const inicio = Date.now();
@@ -60,46 +49,62 @@ async function checkApi(url) {
 }
 
 function adicionarMonitor(url,apelido){
-  if (monitores.some(m => m.url === url)) {
+  if ( db.prepare('SELECT id FROM monitores WHERE url = ?').get(url)) {
     const erro = new Error('Essa URL já está sendo monitorada');
     erro.statusCode = 409;
     throw erro;
   }
-  if (monitores.some(m => m.apelido === apelido)) {
+  if (db.prepare('SELECT id  FROM monitores WHERE apelido = ?').get(apelido)) {
     const erro = new Error('Esse apelido já está em uso');
     erro.statusCode = 409;
     throw erro;
   }
 
  const novoMonitor = {
-    id: gerarId(),
+    id:randomUUID(),
     url,
     apelido,
     ultimoStatus:null
   };
 
-   monitores.push(novoMonitor);
+  const id = novoMonitor.id;
+
+   db.prepare('INSERT INTO monitores (id, url , apelido) VALUES (?, ?, ?)').run(id, url, apelido);
    return novoMonitor;
 }
 
 function listarMonitores(){
-  return monitores;
+ const monitores = db.prepare('SELECT * FROM monitores').all()
+ // converte o ultimoStatus de string para objeto em cada monitor
+ return monitores.map(m => ({
+   ...m,
+    ultimoStatus: m.ultimoStatus ? JSON.parse(m.ultimoStatus) : null
+ }))
 }
 
 function buscarPorId(id) {
-  return monitores.find(m => m.id === id);
+  const resultado = db.prepare('SELECT * FROM monitores WHERE id = ?').get(id);
+  if (!resultado) return null;
+  return {...resultado,
+  ultimoStatus: resultado.ultimoStatus ? JSON.parse(resultado.ultimoStatus) : null
+  }
 }
 
 function buscarPorApelido(apelido) {
-  return monitores.find(m => m.apelido === apelido);
+  const resultado = db.prepare('SELECT * FROM monitores WHERE apelido = ?').get(apelido);
+  if (!resultado) return null;
+  return {...resultado,
+  ultimoStatus: resultado.ultimoStatus ? JSON.parse(resultado.ultimoStatus) : null
+  }
 }
 
 async function iniciarMonitor(intervalo) {
  loopMonitor = setInterval(async () =>{
+  const monitores = db.prepare('SELECT * FROM monitores').all()
  for (let index = 0; index < monitores.length; index++) {
   let api = monitores[index]
   const resultado = await checkApi(api.url);
-  api.ultimoStatus=resultado;
+  db.prepare('UPDATE monitores SET ultimoStatus = ? WHERE id = ?').run(JSON.stringify(resultado), api.id)
   console.log(`[${api.id}] ${api.apelido}`, resultado);
   }
  },intervalo)
@@ -119,9 +124,8 @@ function pararMonitor(){
  }
 
 function deletarMonitor(id){
-  const tamanhoAntes = monitores.length;
-  monitores = monitores.filter(m => m.id !== id);
-  return monitores.length < tamanhoAntes;
+  const resultado = db.prepare('DELETE FROM monitores WHERE id = ?').run(id)
+  return resultado.changes > 0;
 }
 
 export { checkApi, adicionarMonitor, iniciarMonitor,
