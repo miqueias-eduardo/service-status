@@ -121,7 +121,7 @@ router.delete('/:id', (req, res) => {
 
 router.post('/iniciar', (req,res)=>{
 try{
-  const {intervaloMinutos} = req.body;
+  const {intervaloMinutos} = req.body || {};
 
   if(!intervaloMinutos || typeof intervaloMinutos !=='number' ||intervaloMinutos< 5){
     return res.status(400).json({erro: "o intervalo deve ser um numero de no mínimo 5 minutos"})
