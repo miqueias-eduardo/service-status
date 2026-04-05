@@ -3,7 +3,7 @@ import * as monitor from './monitor.service.js';
 
 const router = express.Router();
 
-router.post('/', (req,res)=>{
+router.post('/', async (req,res)=>{
  try{
     const{url,apelido}= req.body
 
@@ -19,7 +19,7 @@ router.post('/', (req,res)=>{
       });
     }
 
-    monitor.adicionarMonitor(url,apelido)
+   await monitor.adicionarMonitor(url,apelido)
     res.status(201).json({mensagem:'Monitor adicionado com sucesso'})
 }
 catch(error){
@@ -33,9 +33,9 @@ catch(error){
 }
 })
 
-router.get('/',(req,res)=>{
+router.get('/', async (req,res)=>{
     try{
-    const monitores = monitor.listarMonitores();
+    const monitores = await monitor.listarMonitores();
     res.status(200).json({mensagem:'monitores listados',
                           dados:monitores })
     }
@@ -45,7 +45,7 @@ router.get('/',(req,res)=>{
     }
 })
 
-router.get('/id/:id',(req,res)=>{
+router.get('/id/:id', async (req,res)=>{
    try {
     const { id } = req.params;
 
@@ -53,7 +53,7 @@ router.get('/id/:id',(req,res)=>{
       return res.status(400).json({ erro: "ID é obrigatório" });
     }
 
-    const monitorEncontrado = monitor.buscarPorId(id);
+    const monitorEncontrado = await monitor.buscarPorId(id);
 
     if (!monitorEncontrado) {
       return res.status(404).json({
@@ -69,7 +69,7 @@ router.get('/id/:id',(req,res)=>{
   }
 });
 
-router.get('/apelido/:apelido',(req,res)=>{
+router.get('/apelido/:apelido', async (req,res)=>{
 try {
     const { apelido } = req.params;
 
@@ -77,7 +77,7 @@ try {
       return res.status(400).json({ erro: "Apelido é obrigatório" });
     }
 
-    const monitorEncontrado = monitor.buscarPorApelido(apelido);
+    const monitorEncontrado = await monitor.buscarPorApelido(apelido);
 
     if (!monitorEncontrado) {
       return res.status(404).json({
@@ -93,7 +93,7 @@ try {
   }
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -101,7 +101,7 @@ router.delete('/:id', (req, res) => {
       return res.status(400).json({ erro: "ID é obrigatório" });
     }
 
-    const removido = monitor.deletarMonitor(id);
+    const removido = await monitor.deletarMonitor(id);
 
     if (!removido) {
       return res.status(404).json({
@@ -119,7 +119,7 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-router.post('/iniciar', (req,res)=>{
+router.post('/iniciar', async (req,res)=>{
 try{
   const {intervaloMinutos} = req.body || {};
 
@@ -127,7 +127,7 @@ try{
     return res.status(400).json({erro: "o intervalo deve ser um numero de no mínimo 5 minutos"})
   }
   const intervaloMs = intervaloMinutos * 60 * 1000;
-  monitor.iniciarMonitor(intervaloMs)
+  await monitor.iniciarMonitor(intervaloMs)
 
   return res.status(200).json({
     mensagem:"Monitor iniciado com sucesso"

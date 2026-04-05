@@ -1,23 +1,19 @@
-import Database from 'better-sqlite3';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import pg from 'pg';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dataDir = path.join(__dirname, '..', '..', 'data');
+const { Pool } = pg;
 
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
+const db = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
-const db = new Database(path.join(dataDir, 'monitors.db'));
-
-db.exec(`
+// Cria a tabela se não existir
+await db.query(`
   CREATE TABLE IF NOT EXISTS monitores (
-   id TEXT PRIMARY KEY NOT NULL,
-   url TEXT NOT NULL,
-   apelido TEXT NOT NULL,
-   ultimoStatus TEXT
+    id TEXT PRIMARY KEY NOT NULL,
+    url TEXT NOT NULL,
+    apelido TEXT NOT NULL,
+    ultimo_status TEXT
   )
 `);
 

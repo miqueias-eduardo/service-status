@@ -8,7 +8,7 @@ API para monitoramento de disponibilidade de serviços externos (health check), 
 
 A aplicação está disponível em produção:
 
-👉 [https://service-status-2m8e.onrender.com](https://service-status-2m8e.onrender.com)
+👉 [https://service-status-2m8e.onrender.com](https://service-status-2m8e.onrender.com/health)
 
 ---
 
@@ -28,7 +28,7 @@ A aplicação está disponível em produção:
 * Node.js (ES Modules)
 * Express
 * Axios
-* better-sqlite3 (SQLite)
+* PostgreSQL
 
 ---
 
@@ -156,7 +156,7 @@ GET /monitors/status
 
 ## 🧠 Como funciona
 
-* Os monitores são armazenados em um banco SQLite
+* Os monitores são armazenados em um banco PostgreSQL
 * O sistema executa verificações periódicas usando `setInterval`
 * Cada verificação:
 
