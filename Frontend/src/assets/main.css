@@ -1,0 +1,47 @@
+/* main.css */
+
+:root {
+  --card: #111820;
+  --bg2: #0d131a;
+  --border: #1c2833;
+  --border2: #263542;
+
+  --text: #e6edf3;
+  --text-dim: #8b98a5;
+  --text-muted: #53616e;
+
+  --green: #23ce6b;
+  --green-dim: rgba(35, 206, 107, 0.1);
+
+  --red: #e74c3c;
+  --red-dim: rgba(231, 76, 60, 0.1);
+
+  --blue: #4da6ff;
+
+  --font: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: #070b10;
+  color: var(--text);
+  font-family: var(--font);
+}
+
+button,
+input {
+  font-family: inherit;
+}
